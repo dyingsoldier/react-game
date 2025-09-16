@@ -1,0 +1,29 @@
+.tip {
+  display: flex;
+  gap: 1rem;
+
+  width: 100%;
+  padding: 1rem;
+  border-radius: 0.75rem;
+
+  background: #ebebfc;
+  color: #4f4fb9;
+}
+
+.tip .icon{
+  width: 2rem;
+  transition: all .5s ease-in-out;
+}
+
+.tip .icon:hover{
+  scale: 1.2;
+}
+
+.tip div h3 {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.tip p {
+  margin-top: .3125rem;
+}
