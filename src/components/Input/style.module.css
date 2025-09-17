@@ -1,0 +1,38 @@
+input {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  outline: none;
+
+  width: 2.875rem;
+  height: 2.875rem;
+
+  background-color: #ebebfc;
+  border: 2px solid #4f4fb9;
+  border-radius: 0.4375rem;
+  caret-color: transparent;
+
+  text-transform: uppercase;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: all 0.5s ease-in-out;
+}
+
+input[type="submit"] {
+  text-transform: inherit;
+  width: 6.625rem;
+  font-size: 1rem;
+  font-weight: 500;
+  background-color: #4f4fb9;
+  color: #ffffff;
+  padding: .75rem .875rem;
+}
+
+input:hover {
+  scale: 1.05;
+}
