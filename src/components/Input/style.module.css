@@ -23,7 +23,7 @@ input {
   transition: all 0.5s ease-in-out;
 }
 
-input[type="submit"] {
+/* input[type="submit"] {
   text-transform: inherit;
   width: 6.625rem;
   font-size: 1rem;
@@ -31,7 +31,7 @@ input[type="submit"] {
   background-color: #4f4fb9;
   color: #ffffff;
   padding: .75rem .875rem;
-}
+} */
 
 input:hover {
   scale: 1.05;

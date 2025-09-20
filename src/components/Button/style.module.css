@@ -1,0 +1,22 @@
+button{
+  width: 6.625rem;
+  height: 2.875rem;
+
+  text-align: center;
+
+  background-color: #6363DB;
+  border: 1px solid #4F4FB9;
+  border-radius: .4375rem;
+  color: #FFFFFF;
+  outline: none;
+  padding: 0 .875rem;
+
+  font-size: 1rem;
+  font-weight: 500;
+
+  transition: all 400ms ease-in-out;
+}
+
+button:hover{
+  scale: 1.05;
+}
