@@ -1,0 +1,17 @@
+.lettersUsed{
+  width: 100%;
+  border-top: 1px solid white;
+  margin-top: 3.25rem;
+}
+
+.lettersUsed h5{
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0.75rem 0;
+}
+
+.lettersUsed div:nth-child(2){
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
+}

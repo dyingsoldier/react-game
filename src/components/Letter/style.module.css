@@ -18,3 +18,24 @@
 
   margin-bottom: 3.1875rem;
 }
+
+.letterSmall {
+  width: 2rem;
+  height: 2rem;
+
+  font-size: 1rem;
+  font-weight: 500;
+  border: 1px solid #6363db;
+}
+
+.letterCorrect{
+  background-color: #E1F5EC;
+  border-color: 1px solid #03AB4F;
+  color: #03AB4F;
+}
+
+.letterWrong{
+  background-color: #FFCF62;
+  border-color: #691B0A;
+  color: #000000;
+}

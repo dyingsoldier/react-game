@@ -19,6 +19,11 @@ button {
   transition: filter 0.2s;
 }
 
+button,
+input {
+  font-family: "Jetbrains mono";
+}
+
 button:hover {
   filter: brightness();
 }
