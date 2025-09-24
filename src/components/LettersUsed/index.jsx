@@ -9,6 +9,7 @@ export function LettersUsed({ data }) {
       <div>
         {data.map(({ value, correct }) => (
           <Letter
+            key={value}
             value={value}
             size="default"
             color={correct ? "correct" : "wrong"}

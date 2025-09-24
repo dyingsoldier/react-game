@@ -11,9 +11,8 @@ import { Button } from "./components/Button"
 import { LettersUsed } from "./components/LettersUsed"
 
 function App() {
+  const [score, setScore] = useState(0)
   const [challenge, setChallenge] = useState(null)
-  const [attempt, setattempt] = useState(0)
-  const [tip, setTip] = useState()
   const [letter, setLetter] = useState("")
   const [lettersUsed, setLettersUsed] = useState([])
 
@@ -28,9 +27,9 @@ function App() {
 
     setChallenge(randomWord)
 
-    setattempt("0")
+    setScore(0)
     setLetter("")
-    setTip(WORDS.tip)
+    setLettersUsed([])
   }
 
   function handleConfirm() {
@@ -40,6 +39,31 @@ function App() {
 
     if (!letter.trim()) {
       return alert("Digite uma letra")
+    }
+
+    const value = letter.toUpperCase()
+    const exists = lettersUsed.find(
+      (used) => used.value.toUpperCase() === value
+    )
+
+    if (exists) {
+      return alert(`Você ja digitou essa letra (${letter.toUpperCase()})`)
+    }
+
+    const hit = challenge.word
+      .toUpperCase()
+      .split("")
+      .filter((char) => char === value).length
+
+    const correct = hit > 0
+    const currentScore = score + hit
+
+    setLetter("")
+    setScore(currentScore)
+    setLettersUsed((prevState) => [...prevState, { value, correct }])
+
+    if (setScore > 10) {
+      restartGame()
     }
   }
 
@@ -54,37 +78,37 @@ function App() {
   return (
     <div className={style.container}>
       <main className={style.main}>
-        <Header current={attempt} max={10} onRestart={() => restartGame()} />
-        <Tip tip={tip} />
+        <Header current={score} max={10} onRestart={() => restartGame()} />
+        <Tip tip={challenge.tip} />
 
         <div className={style.Letters}>
-          {challenge.word.split("").map(() => (
-            <Letter value="" />
-          ))}
+          {challenge.word.split("").map((letter, index) => {
+            console.log(lettersUsed)
+            const letterUsed = lettersUsed.find(
+              (used) => used.value.toUpperCase() === letter.toUpperCase()
+            )
+            return (
+              <Letter
+                key={index}
+                value={letterUsed?.value}
+                color={letterUsed?.correct ? "correct" : "default"}
+              />
+            )
+          })}
         </div>
 
         <h4>Palpite</h4>
         <div className={style.attempt}>
           <Input
+            value={letter}
             autoFocus
             maxLength={1}
-            placeholder="M"
             onChange={(e) => setLetter(e.target.value)}
           />
           <Button title={"Confirmar"} onClick={handleConfirm} />
         </div>
 
         <LettersUsed data={lettersUsed} />
-
-        {/* <div className={style.content}>
-          <h3>Letras utilizadas</h3>
-          <div className={style.words}>
-            <Letter value={"L"} />
-            <Letter value={"A"} />
-            <Letter value={"R"} />
-            <Letter value={"I"} />
-          </div>
-        </div> */}
       </main>
     </div>
   )
