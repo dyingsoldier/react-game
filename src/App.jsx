@@ -1,4 +1,5 @@
 import style from "./app.module.css"
+
 import { useEffect, useState } from "react"
 
 import { WORDS } from "./utils/words.js"
@@ -11,19 +12,26 @@ import { Button } from "./components/Button"
 import { LettersUsed } from "./components/LettersUsed"
 
 function App() {
+  // Pontuação atual
   const [score, setScore] = useState(0)
+
+  // adicionando o challenge como desafios
   const [challenge, setChallenge] = useState(null)
+
+  // letras compondo a palavra
+
   const [letter, setLetter] = useState("")
+
+  // letras utilizadas
   const [lettersUsed, setLettersUsed] = useState([])
 
-  function restartGame() {
-    alert("O Jogo foi reiniciado")
-  }
+  // Quantia de Palavras e adicionando limite em tentativas
+  const attemptLimit = challenge?.word.length
+  const maxLimit = attemptLimit + Math.floor(attemptLimit / 2)
 
   function startGame() {
     const index = Math.floor(Math.random() * WORDS.length)
     const randomWord = WORDS[index]
-    console.log(randomWord)
 
     setChallenge(randomWord)
 
@@ -31,6 +39,41 @@ function App() {
     setLetter("")
     setLettersUsed([])
   }
+
+  useEffect(() => {
+    startGame()
+  }, [])
+
+  function restartGame() {
+    const isConfirm = window.confirm("Você deseja reiniciar o jogo ?")
+    if (isConfirm) {
+      startGame()
+    }
+  }
+
+  function endGame(message) {
+    alert(message)
+    startGame()
+  }
+
+  useEffect(() => {
+    if (!challenge) {
+      return
+    }
+
+    const attemptLimit = challenge.word.length
+    const maxLimit = attemptLimit + Math.floor(attemptLimit / 2)
+
+    setTimeout(() => {
+      if (score === attemptLimit) {
+        return endGame("Parabéns, Você Ganhou")
+      }
+
+      if (lettersUsed.length === maxLimit) {
+        return endGame("Usou todas as Tentativas")
+      }
+    }, 200)
+  }, [score, lettersUsed.length])
 
   function handleConfirm() {
     if (!challenge) {
@@ -47,6 +90,7 @@ function App() {
     )
 
     if (exists) {
+      setLetter("")
       return alert(`Você ja digitou essa letra (${letter.toUpperCase()})`)
     }
 
@@ -67,10 +111,6 @@ function App() {
     }
   }
 
-  useEffect(() => {
-    startGame()
-  }, [])
-
   if (!challenge) {
     return
   }
@@ -78,12 +118,15 @@ function App() {
   return (
     <div className={style.container}>
       <main className={style.main}>
-        <Header current={score} max={10} onRestart={() => restartGame()} />
+        <Header
+          current={lettersUsed.length}
+          max={maxLimit}
+          onRestart={() => restartGame()}
+        />
         <Tip tip={challenge.tip} />
 
         <div className={style.Letters}>
           {challenge.word.split("").map((letter, index) => {
-            console.log(lettersUsed)
             const letterUsed = lettersUsed.find(
               (used) => used.value.toUpperCase() === letter.toUpperCase()
             )

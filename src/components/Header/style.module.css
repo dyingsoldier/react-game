@@ -25,11 +25,13 @@
 }
 
 .container header img {
-  width: 2rem;
-  height: 2rem;
+  width: 1.5rem;
+  height: 1.5rem;
+
+  transition: all 200ms ease-in-out;
 }
 .container header img:hover {
-  scale: 1.05;
+  scale: 1.01;
 }
 
 .container header span{
