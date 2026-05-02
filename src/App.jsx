@@ -1,6 +1,6 @@
 import style from "./app.module.css"
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 import { WORDS } from "./utils/words.js"
 
@@ -10,6 +10,7 @@ import { Letter } from "./components/Letter"
 import { Input } from "./components/Input"
 import { Button } from "./components/Button"
 import { LettersUsed } from "./components/LettersUsed"
+import { RestartGame } from "./components/restartGame"
 
 function App() {
   // Pontuação atual
@@ -25,11 +26,13 @@ function App() {
   // letras utilizadas
   const [lettersUsed, setLettersUsed] = useState([])
 
+  const [isRestarting, setIsRestarting] = useState(false)
+
   // Quantia de Palavras e adicionando limite em tentativas
   const attemptLimit = challenge?.word.length
   const maxLimit = attemptLimit + Math.floor(attemptLimit / 2)
 
-  function startGame() {
+  const startGame = useCallback(function startGame() {
     const index = Math.floor(Math.random() * WORDS.length)
     const randomWord = WORDS[index]
 
@@ -38,23 +41,22 @@ function App() {
     setScore(0)
     setLetter("")
     setLettersUsed([])
-  }
+    setIsRestarting(false)
+  }, [])
 
   useEffect(() => {
     startGame()
-  }, [])
+  }, [startGame])
 
-  function restartGame() {
-    const isConfirm = window.confirm("Você deseja reiniciar o jogo ?")
-    if (isConfirm) {
-      startGame()
+  const restartGame = useCallback(async function restartGame(del = 0) {
+    if (del > 0) {
+      setIsRestarting(true)
     }
-  }
 
-  function endGame(message) {
-    alert(message)
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+    await delay(del)
     startGame()
-  }
+  }, [startGame])
 
   useEffect(() => {
     if (!challenge) {
@@ -64,16 +66,16 @@ function App() {
     const attemptLimit = challenge.word.length
     const maxLimit = attemptLimit + Math.floor(attemptLimit / 2)
 
-    setTimeout(() => {
-      if (score === attemptLimit) {
-        return endGame("Parabéns, Você Ganhou")
-      }
+    if (isRestarting) {
+      return
+    }
 
-      if (lettersUsed.length === maxLimit) {
-        return endGame("Usou todas as Tentativas")
-      }
-    }, 200)
-  }, [score, lettersUsed.length])
+    if (score === attemptLimit) {
+      restartGame(1000)
+    } else if (lettersUsed.length === maxLimit) {
+      restartGame(1000)
+    }
+  }, [challenge, isRestarting, restartGame, score, lettersUsed.length])
 
   function handleConfirm() {
     if (!challenge) {
@@ -81,17 +83,15 @@ function App() {
     }
 
     if (!letter.trim()) {
-      return alert("Digite uma letra")
+      return
     }
 
     const value = letter.toUpperCase()
-    const exists = lettersUsed.find(
-      (used) => used.value.toUpperCase() === value
-    )
+    const exists = lettersUsed.find((used) => used.value.toUpperCase() === value)
 
     if (exists) {
       setLetter("")
-      return alert(`Você ja digitou essa letra (${letter.toUpperCase()})`)
+      return
     }
 
     const hit = challenge.word
@@ -106,29 +106,26 @@ function App() {
     setScore(currentScore)
     setLettersUsed((prevState) => [...prevState, { value, correct }])
 
-    if (setScore > 10) {
-      restartGame()
-    }
   }
 
   if (!challenge) {
-    return
+    return null
+  }
+
+  if (isRestarting) {
+    return <RestartGame />
   }
 
   return (
     <div className={style.container}>
       <main className={style.main}>
-        <Header
-          current={lettersUsed.length}
-          max={maxLimit}
-          onRestart={() => restartGame()}
-        />
+        <Header current={lettersUsed.length} max={maxLimit} onRestart={() => restartGame()} />
         <Tip tip={challenge.tip} />
 
         <div className={style.Letters}>
           {challenge.word.split("").map((letter, index) => {
             const letterUsed = lettersUsed.find(
-              (used) => used.value.toUpperCase() === letter.toUpperCase()
+              (used) => used.value.toUpperCase() === letter.toUpperCase(),
             )
             return (
               <Letter

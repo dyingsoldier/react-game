@@ -29,13 +29,13 @@
 }
 
 .letterCorrect{
-  background-color: #E1F5EC;
+  background-color: #03AB4F;
   border-color: 1px solid #03AB4F;
-  color: #03AB4F;
+  color: white;
 }
 
 .letterWrong{
-  background-color: #FFCF62;
+  background-color: #ff0000;
   border-color: #691B0A;
-  color: #000000;
+  color: white;
 }
